@@ -13,12 +13,48 @@ const store = (function () {
 
   const hideCheckedItems = false;
   const searchTerm = '';
+  const findById = function(id) {
+    return items.find(cuid => cuid === id);
+  };
+
+  const addItem = function(name) {
+    try {
+      Item.validateName(name);
+      this.items.push(Item.create(name));
+    }
+    catch(error) {
+      console.log(error);
+    }
+  };
+
+  const findAndToggleChecked = function(id) {
+    const foundItem = this.findById(id);
+    foundItem.checked = !foundItem.checked;
+  };
+
+  const findAndUpdateName = function(id, newName) {
+    try {
+      Item.validateName(newName);
+      const foundItem = this.findById(id);
+      foundItem.name = newName;
+    } catch(error) {
+      console.log(`Cannot update name: ${error}`);
+    }
+  };
+
+  const findAndDelete = function(id) {
+    this.items = this.items.filter(object => object.id !== id);
+  };
 
   return{
     items,
     hideCheckedItems,
-    searchTerm
-
+    searchTerm,
+    findById,
+    addItem,
+    findAndToggleChecked,
+    findAndUpdateName,
+    findAndDelete
   };
 
 }() );
